@@ -158,7 +158,6 @@ build/
 
 docs/
 ├── ARCHITECTURE.md
-├── ROADMAP.md
 ├── DEPENDENCY_POLICY.md
 └── SAFETY.md
 

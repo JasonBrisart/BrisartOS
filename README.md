@@ -1,164 +1,186 @@
 # BrisartOS
 
-**Local-first infrastructure for research, preservation, identity, and offline environments.**
+**A pure-Python, dependency-free, fully custom operating system research project.**
 
-BrisartOS is an evolving ecosystem of software, workflows, and supporting infrastructure designed for researchers, archivists, developers, and organizations that prioritize:
+BrisartOS is an experimental hardware operating system being built from the ground up using Python as the primary development language.
 
-- Local ownership
-- Auditability
-- Maintainability
-- Source availability
-- Long-term preservation
-- Offline operation
-- Dependency-conscious development
+The project focuses on local-first operation, auditability, long-term maintainability, offline capability, and complete control over the software stack.
 
-BrisartOS is not a traditional operating system.
+BrisartOS is not a Linux distribution, Windows replacement, macOS clone, or wrapper around an existing operating system.
 
-Instead, it represents a unified research environment built upon the Brisart ecosystem of software tools and supporting technologies.
+The goal is to create a fully custom operating system designed around research, preservation, identity management, offline operation, and long-term digital stewardship.
 
 ---
 
 # Philosophy
 
-The Brisart ecosystem is built because the Brisart research environment requires it.
+BrisartOS follows several core principles:
 
-Rather than creating software for hypothetical users, Brisart tools are developed to solve real operational problems encountered within local-first and research-oriented workflows.
+- Pure Python development
+- No external dependencies
+- Local-first architecture
+- Offline-first operation
+- Air-gapped environment compatibility
+- Long-term maintainability
+- Source transparency
+- Full stack ownership
 
-Organizations with similar requirements may benefit from the same ongoing development.
-
----
-
-# Core Principles
-
-## Local First
-
-Users should maintain ownership of their own data.
-
-## Auditability
-
-Software should remain understandable and inspectable.
-
-## Maintainability
-
-Long-term maintenance is prioritized over unnecessary complexity.
-
-## Offline Capability
-
-Tools should continue functioning in disconnected and air-gapped environments whenever practical.
-
-## Source Availability
-
-Published source code supports transparency, education, review, and preservation.
-
-## Longevity
-
-Software should prioritize long-term usability rather than short-term trends.
+The project prioritizes understanding and control over complexity and abstraction.
 
 ---
 
-# Ecosystem Components
+# Current Status
 
-## BrisartResearchArchive
+**Version:** 0.2.0-alpha
 
-Research organization, framework management, archival workflows, and structured knowledge preservation.
+BrisartOS currently contains:
 
-## BrisartDevTools
+- Python-generated boot images
+- Custom binary image generation
+- Dependency-free build process
+- Image inspection tooling
+- Experimental bare-metal boot infrastructure
 
-Developer utilities, workflow automation, documentation tooling, and development support.
+The project remains in an early research stage.
 
-## BrisartPreservationTools
+---
 
-File verification, integrity monitoring, archival validation, and long-term preservation workflows.
+# Project Goals
 
-## BrisartIdentityTools
+## Short Term
 
-Local identity records, offline verification workflows, credential systems, and identity management experiments.
+- Improve boot image generation
+- Expand Python-based instruction emitters
+- Create flexible binary layout tooling
+- Improve image inspection and validation
 
-## AirGapped-Web
+## Mid Term
 
-Offline website preservation and self-contained web archival tooling.
+- Second-stage loader
+- Runtime initialization
+- Memory management experiments
+- Shell research
+- Local filesystem research
 
-## BrisartSecurityResearch
+## Long Term
 
-Experimental research into transparent and inspectable cryptographic constructions for offline and air-gapped environments.
+- Hardware-installable operating system
+- Research-focused runtime environment
+- Preservation tooling integration
+- Identity management integration
+- Offline documentation system
+- Archive management capabilities
+- Air-gapped research workstation profile
+
+---
+
+# Design Rules
+
+## Pure Python
+
+BrisartOS is intended to be authored using Python.
+
+Python is used to generate the binary structures required for hardware startup and operating system functionality.
+
+## No Dependencies
+
+BrisartOS follows a strict dependency-free policy.
+
+The project should not require:
+
+- Third-party Python packages
+- External frameworks
+- Online services
+- Package managers
+- Cloud infrastructure
+
+Python standard library modules are preferred whenever possible.
+
+## Fully Custom
+
+BrisartOS is intended to be custom-built rather than layered on top of existing operating systems.
+
+The project prioritizes understanding how systems work internally rather than abstracting those details away.
+
+---
+
+# Example Build
+
+```bash
+python brisartos/build.py
+```
+
+Example output:
+
+```text
+===================================
+ BrisartOS Build Complete
+===================================
+Output : build/brisartos_boot.img
+Size   : 512 bytes
+Message: BrisartOS 0.2.0-alpha
+Signature: 55AA
+```
+
+---
+
+# Repository Structure
+
+```text
+BrisartOS/
+
+README.md
+requirements.txt
+
+brisartos/
+├── build.py
+├── emitter.py
+├── labels.py
+├── inspect_image.py
+
+docs/
+├── ARCHITECTURE.md
+├── ROADMAP.md
+├── DEPENDENCY_POLICY.md
+└── SAFETY.md
+
+build/
+```
 
 ---
 
 # Intended Environments
 
-BrisartOS is intended for environments such as:
+BrisartOS is being researched for environments such as:
 
 - Research laboratories
-- Academic institutions
-- Digital preservation initiatives
-- Archive projects
-- Historical collections
-- Independent researchers
-- Air-gapped environments
+- Digital preservation projects
+- Archive environments
+- Offline workstations
+- Air-gapped systems
+- Identity verification systems
 - Long-term knowledge repositories
 
 ---
 
-# Development Model
+# Experimental Notice
 
-BrisartOS is an actively evolving ecosystem.
+BrisartOS is an experimental research project.
 
-New tools, workflows, features, and infrastructure may be introduced as operational requirements evolve.
+Generated boot images, runtimes, and operating system components should not be considered production-ready.
 
-The ecosystem is designed around continuous improvement rather than a fixed endpoint.
-
-There is no final version.
-
-The environment grows alongside the needs that drive its development.
-
----
-
-# Why BrisartOS?
-
-Because research data matters.
-
-Because preservation matters.
-
-Because understanding software matters.
-
-Because ownership matters.
-
-Because transparency matters.
-
-And because some environments cannot rely on always-online infrastructure.
+All development should be treated as research and experimentation.
 
 ---
 
 # Vision
 
-The long-term vision of BrisartOS is to provide a complete local-first environment for:
+The long-term vision of BrisartOS is simple:
 
-- Research
-- Preservation
-- Identity management
-- Documentation
-- Knowledge organization
-- Offline operation
-- Long-term digital stewardship
-
-Built by a researcher.
-
-Used by a researcher.
-
-Available for others who share similar requirements.
-
----
-
-# Status
-
-BrisartOS is an active and evolving ecosystem project.
-
-The software, architecture, workflows, and supporting infrastructure will continue to evolve as requirements change and new challenges emerge.
-
-This project should be viewed as a long-term research and development initiative rather than a fixed software product.
+> Build a local-first, dependency-free, fully custom operating system designed for research environments, digital preservation, identity infrastructure, and long-term ownership of data.
 
 ---
 
 **BrisartOS**
 
-*A local-first ecosystem for research, preservation, identity, and long-term digital stewardship.*
+*Pure Python. No Dependencies. Fully Custom.*

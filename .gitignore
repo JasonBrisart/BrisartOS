@@ -1,1 +1,8 @@
-*.py
+__pycache__/
+*.pyc
+
+build/*.img
+build/*.vfd
+
+module_data/
+logs/

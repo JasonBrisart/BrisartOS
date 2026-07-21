@@ -1,0 +1,5 @@
+file: build/brisartos_boot.img
+size: 512 bytes
+boot signature: 55aa
+valid 512-byte boot sector: False
+first 64 bytes: 31 c0 8e d8 8e c0 be 17 7c ac 84 c0 74 06 b4 0e cd 10 eb f5 f4 eb fd 42 72 69 73 61 72 74 4f 53 20 50 59 42 4f 4f 54 20 30 2e 31 2e 30 2d 61 6c 70 68 61 0d 0a 50 79 74 68 6f 6e 2d 6d 61 64 65

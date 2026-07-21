@@ -1,0 +1,2 @@
+wrote build/brisartos_boot.img (512 bytes)
+signature: 55aa

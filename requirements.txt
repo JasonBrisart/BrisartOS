@@ -1,2 +1,0 @@
-# BrisartOS has no external Python dependencies.
-# Python standard library only.

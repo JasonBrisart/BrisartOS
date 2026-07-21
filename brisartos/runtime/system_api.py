@@ -30,8 +30,8 @@ class SystemAPI:
         """
         Return a 128-bit BrisartOS object identifier.
 
-        This is not a 128-bit CPU feature.
-        It is a future-proof internal identifier model.
+        Used for files, archives, modules, services,
+        and future BrisartOS object tracking.
         """
         return secrets.token_hex(16)
 

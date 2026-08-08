@@ -33,7 +33,10 @@ The project prioritizes understanding and control over complexity and abstractio
 
 # Current Status
 
-**Version:** 0.4.0-alpha
+**Version:** 0.4.1-alpha
+
+The canonical version is defined once in `version.py` and imported by the
+runtime and build tooling. All other references should follow that source.
 
 BrisartOS currently includes:
 
@@ -47,6 +50,7 @@ BrisartOS currently includes:
 - Built-in application structure
 - Pure-Python module loading
 - 128-bit internal object identifiers
+- Single-source-of-truth versioning
 - Dependency-free development model
 
 The project remains in an active research and experimentation stage.
@@ -84,7 +88,6 @@ Responsible for:
 Responsible for:
 
 - Archive services
-- Identity services
 - Filesystem services
 - Settings services
 - Update services
@@ -124,7 +127,7 @@ Modules are pure Python and communicate through the BrisartOS system APIs.
 
 ---
 
-# Object Model
+## Object Model
 
 BrisartOS uses 128-bit internal identifiers.
 
@@ -147,39 +150,53 @@ This object model is intended to provide durable identifiers for future operatin
 
 ---
 
-# Repository Structure
+## Repository Structure
 
 ```text
 BrisartOS/
-
-README.md
-
-build/
-
-docs/
-├── ARCHITECTURE.md
-├── DEPENDENCY_POLICY.md
-└── SAFETY.md
-
-modules/
-
-brisartos/
-├── apps/
-├── boot/
-├── runtime/
-├── services/
-├── shell/
-├── build.py
-├── emitter.py
-├── labels.py
-└── platform.py
+├── brisartos/
+│   ├── apps/
+│   │   ├── __init__.py
+│   │   └── browser.py
+│   ├── boot/
+│   │   ├── inspect_image.py
+│   │   ├── make_boot_image.py
+│   │   └── make_floppy_image.py
+│   ├── runtime/
+│   │   ├── brisart_platform.py
+│   │   ├── module_loader.py
+│   │   ├── runtime.py
+│   │   └── system_api.py
+│   ├── services/
+│   │   ├── archive_service.py
+│   │   ├── filesystem_service.py
+│   │   ├── settings_service.py
+│   │   └── update_service.py
+│   ├── shell/
+│   │   └── shell.py
+│   ├── build.py
+│   ├── emitter.py
+│   ├── labels.py
+│   └── platform.py
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── CHANGELOG.md
+│   ├── DEPENDENCY_POLICY.md
+│   └── SAFETY.md
+├── modules/
+│   └── hello_lab/
+│       └── module.py
+├── .gitignore
+├── LICENSE.txt
+├── README.md
+└── version.py
 ```
 
 ---
 
-# Development Principles
+## Development Principles
 
-## Pure Python
+### Pure Python
 
 BrisartOS is authored using Python.
 
@@ -194,9 +211,7 @@ Python is used for:
 
 Python standard library components are preferred whenever practical.
 
----
-
-## No Dependencies
+### No Dependencies
 
 BrisartOS follows a strict dependency-free policy.
 
@@ -210,9 +225,7 @@ The project should not require:
 
 The Python standard library is preferred whenever possible.
 
----
-
-## Fully Custom
+### Fully Custom
 
 BrisartOS is intended to be custom-built rather than layered on top of existing software ecosystems.
 
@@ -220,7 +233,7 @@ The project favors understanding how systems work internally rather than relying
 
 ---
 
-# Intended Environments
+## Intended Environments
 
 BrisartOS is being researched for environments such as:
 
@@ -235,18 +248,18 @@ BrisartOS is being researched for environments such as:
 
 ---
 
-# Roadmap
+## Roadmap
 
-## Short-Term Goals
+### Short-Term Goals
 
+- Wire the service framework into the runtime
 - Expand runtime functionality
 - Expand service architecture
 - Improve module APIs
 - Improve shell capabilities
 - Build archive service infrastructure
-- Build identity service infrastructure
 
-## Mid-Term Goals
+### Mid-Term Goals
 
 - Runtime initialization research
 - Filesystem experimentation
@@ -255,7 +268,7 @@ BrisartOS is being researched for environments such as:
 - Research application framework
 - Modular workflow development
 
-## Long-Term Goals
+### Long-Term Goals
 
 - Hardware-installable operating system
 - Research-focused runtime environment
@@ -268,7 +281,7 @@ BrisartOS is being researched for environments such as:
 
 ---
 
-# Experimental Notice
+## Experimental Notice
 
 BrisartOS is an experimental research project.
 
@@ -278,7 +291,7 @@ All development should be treated as research and experimentation.
 
 ---
 
-# Vision
+## Vision
 
 The long-term vision of BrisartOS is to create a fully custom, local-first, dependency-free operating environment designed for research, digital preservation, identity infrastructure, archive management, and long-term ownership of information.
 
@@ -294,6 +307,6 @@ BrisartOS aims to provide:
 
 ---
 
-# BrisartOS
+## BrisartOS
 
-*Pure Python. No Dependencies. Fully Custom. Modular by Design.*
+_Pure Python. No Dependencies. Fully Custom. Modular by Design._

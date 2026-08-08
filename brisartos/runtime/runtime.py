@@ -4,20 +4,25 @@ Pure Python.
 No dependencies.
 """
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from version import NAME as BRISART_NAME, VERSION as BRISART_VERSION
 from brisart_platform import PlatformInfo
 from system_api import SystemAPI
 from module_loader import ModuleLoader
 
 
 class BrisartRuntime:
-    NAME = "BrisartOS"
-    VERSION = "0.4.0-alpha"
+    NAME = BRISART_NAME
+    VERSION = BRISART_VERSION
     PROFILE = "Modular Research Operating Environment"
 
     def __init__(self):
         self.platform = PlatformInfo()
         self.api = SystemAPI(self.platform)
-
         self.loader = ModuleLoader(
             modules_path="modules",
             api=self.api
@@ -41,53 +46,42 @@ class BrisartRuntime:
 
     def print_system_info(self):
         print()
-
         info = self.platform.describe()
-
         for key in sorted(info):
             print(f"{key}: {info[key]}")
-
         print()
 
     def print_modules(self):
         print()
-
         if not self.loader.modules:
             print("No modules found.")
             print()
             return
-
         for name in sorted(self.loader.modules):
             module = self.loader.modules[name]
             print(f"{name} - {module.display_name}")
-
         print()
 
     def describe_module(self, name):
         module = self.loader.get(name)
-
         if module is None:
             print("module not found")
             return
-
         print()
         print("Name:", module.name)
         print("Display Name:", module.display_name)
         print("Version:", module.version)
         print("Author:", module.author)
         print("ABI:", module.abi)
-
         print()
         print(module.description)
         print()
 
     def run_module(self, name):
         module = self.loader.get(name)
-
         if module is None:
             print("module not found")
             return
-
         module.run()
 
     def reload_modules(self):

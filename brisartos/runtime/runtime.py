@@ -8,11 +8,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "services"))
 
 from version import NAME as BRISART_NAME, VERSION as BRISART_VERSION
 from brisart_platform import PlatformInfo
 from system_api import SystemAPI
 from module_loader import ModuleLoader
+from service_registry import ServiceRegistry
 
 
 class BrisartRuntime:
@@ -23,9 +25,10 @@ class BrisartRuntime:
     def __init__(self):
         self.platform = PlatformInfo()
         self.api = SystemAPI(self.platform)
+        self.services = ServiceRegistry()
         self.loader = ModuleLoader(
             modules_path="modules",
-            api=self.api
+            api=self.api,
         )
 
     def boot(self):
@@ -36,6 +39,8 @@ class BrisartRuntime:
         print(f"Version : {self.VERSION}")
         print(f"Profile : {self.PROFILE}")
         print()
+
+        self.services.register_builtin_services()
         self.loader.discover()
 
     def version_text(self):
@@ -57,6 +62,7 @@ class BrisartRuntime:
             print("No modules found.")
             print()
             return
+
         for name in sorted(self.loader.modules):
             module = self.loader.modules[name]
             print(f"{name} - {module.display_name}")
@@ -67,6 +73,7 @@ class BrisartRuntime:
         if module is None:
             print("module not found")
             return
+
         print()
         print("Name:", module.name)
         print("Display Name:", module.display_name)
@@ -82,8 +89,42 @@ class BrisartRuntime:
         if module is None:
             print("module not found")
             return
+
         module.run()
 
     def reload_modules(self):
         self.loader.discover()
         print("modules reloaded")
+
+    def print_services(self):
+        print()
+        services = self.services.status_all()
+
+        if not services:
+            print("No services registered.")
+            print()
+            return
+
+        for service in services:
+            print(
+                f"{service['name']} - "
+                f"{service['display_name']} - "
+                f"{service['status']}"
+            )
+
+        print()
+
+    def describe_service(self, name):
+        service = self.services.describe(name)
+
+        if service is None:
+            print("service not found")
+            return
+
+        print()
+        print("Name:", service["name"])
+        print("Display Name:", service["display_name"])
+        print("Version:", service["version"])
+        print("Class:", service["class"])
+        print("Status:", service["status"])
+        print()

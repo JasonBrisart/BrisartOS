@@ -11,9 +11,7 @@ PROMPT = "BrisartOS> "
 
 
 def print_help():
-
     print()
-
     print("help")
     print("version")
     print("system")
@@ -21,38 +19,33 @@ def print_help():
     print("describe <module>")
     print("run <module>")
     print("reload")
+    print("services")
+    print("service <name>")
     print("new-id")
     print("exit")
-
     print()
 
 
 def shell_loop():
-
     runtime = BrisartRuntime()
-
     runtime.boot()
 
     print(
         "BrisartOS Modular Shell"
     )
-
     print(
         "Type help "
         "for commands."
     )
-
     print()
 
     running = True
 
     while running:
-
         try:
             command = input(
                 PROMPT
             )
-
         except EOFError:
             break
 
@@ -66,15 +59,13 @@ def shell_loop():
             continue
 
         name = parts[0].lower()
-
         args = parts[1:]
 
         if name in (
             "exit",
             "quit",
-            "shutdown"
+            "shutdown",
         ):
-
             running = False
 
         elif name == "help":
@@ -93,21 +84,34 @@ def shell_loop():
             runtime.print_modules()
 
         elif name == "describe":
-
             if args:
                 runtime.describe_module(
                     args[0]
                 )
+            else:
+                print("usage: describe <module>")
 
         elif name == "run":
-
             if args:
                 runtime.run_module(
                     args[0]
                 )
+            else:
+                print("usage: run <module>")
 
         elif name == "reload":
             runtime.reload_modules()
+
+        elif name == "services":
+            runtime.print_services()
+
+        elif name == "service":
+            if args:
+                runtime.describe_service(
+                    args[0]
+                )
+            else:
+                print("usage: service <name>")
 
         elif name == "new-id":
             print(

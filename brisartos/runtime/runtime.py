@@ -58,6 +58,7 @@ class BrisartRuntime:
 
     def print_modules(self):
         print()
+
         if not self.loader.modules:
             print("No modules found.")
             print()
@@ -66,10 +67,12 @@ class BrisartRuntime:
         for name in sorted(self.loader.modules):
             module = self.loader.modules[name]
             print(f"{name} - {module.display_name}")
+
         print()
 
     def describe_module(self, name):
         module = self.loader.get(name)
+
         if module is None:
             print("module not found")
             return
@@ -80,12 +83,14 @@ class BrisartRuntime:
         print("Version:", module.version)
         print("Author:", module.author)
         print("ABI:", module.abi)
+        print("Permissions:", ", ".join(module.permissions))
         print()
         print(module.description)
         print()
 
     def run_module(self, name):
         module = self.loader.get(name)
+
         if module is None:
             print("module not found")
             return

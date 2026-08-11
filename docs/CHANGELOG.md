@@ -1,3 +1,20 @@
+## [0.4.3-alpha] - 2026-08-10
+
+### Added
+- Added permission-aware module API wrapper.
+- Added runtime enforcement for module permissions.
+- Added explicit `object_id` permission for modules that generate BrisartOS object identifiers.
+- Added module permission display to module inspection output.
+
+### Changed
+- Modules now receive a permissioned API wrapper instead of the unrestricted core SystemAPI object.
+- The Hello Lab module now declares its object identifier permission explicitly.
+
+### Notes
+- This update turns module metadata into an enforceable runtime contract.
+- This keeps BrisartOS dependency-free and standard-library-only.
+- This advances the module API and shell inspection roadmap.
+
 ## [0.4.2-alpha] - 2026-08-10
 
 ### Added

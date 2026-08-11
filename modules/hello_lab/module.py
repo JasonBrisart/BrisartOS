@@ -21,6 +21,7 @@ MODULE_ABI = (
 MODULE_PERMISSIONS = (
     "log",
     "module_data",
+    "object_id",
 )
 
 

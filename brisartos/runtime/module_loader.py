@@ -7,6 +7,8 @@ No dependencies.
 from pathlib import Path
 import importlib.util
 
+from module_api import ModuleAPI
+
 
 class LoadedModule:
 
@@ -24,12 +26,18 @@ class LoadedModule:
         self.permissions = module_object.MODULE_PERMISSIONS
 
     def run(self):
+        module_api = ModuleAPI(
+            module_name=self.name,
+            permissions=self.permissions,
+            system_api=self.api
+        )
+
         self.api.log(
             self.name,
             "module started"
         )
 
-        self.module_object.run(self.api)
+        self.module_object.run(module_api)
 
         self.api.log(
             self.name,
@@ -81,6 +89,14 @@ class ModuleLoader:
                 )
                 continue
 
+            if loaded.abi != self.SUPPORTED_ABI:
+                print(
+                    f"failed to load "
+                    f"{folder.name}: unsupported ABI "
+                    f"{loaded.abi}"
+                )
+                continue
+
             self.modules[loaded.name] = loaded
 
     def _load_module(
@@ -100,6 +116,18 @@ class ModuleLoader:
                 module_file
             )
         )
+
+        if spec is None:
+            raise ImportError(
+                f"could not create module spec for "
+                f"{module_file}"
+            )
+
+        if spec.loader is None:
+            raise ImportError(
+                f"could not create module loader for "
+                f"{module_file}"
+            )
 
         module_object = (
             importlib.util

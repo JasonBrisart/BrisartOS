@@ -5,7 +5,7 @@ Pure Python. No dependencies.
 """
 
 NAME = "BrisartOS"
-VERSION = "0.4.4-alpha"
+VERSION = "0.4.5-alpha"
 
 
 def version_text():

@@ -33,10 +33,22 @@ The project prioritizes understanding and control over complexity and abstractio
 
 # Current Status
 
-**Version:** 0.4.1-alpha
+BrisartOS does not hardcode a version number in this README, so this file never
+goes stale as releases ship. The canonical version is defined once in
+`version.py` and imported by the runtime and build tooling. All other
+references should follow that source.
 
-The canonical version is defined once in `version.py` and imported by the
-runtime and build tooling. All other references should follow that source.
+To check the current version, either open `version.py` directly or run:
+
+```bash
+python -c "from brisartos.version import version_text; print(version_text())"
+```
+
+Or from the running shell:
+
+```text
+BrisartOS> version
+```
 
 BrisartOS currently includes:
 
@@ -140,11 +152,7 @@ These identifiers can be used for:
 - Identity records
 - Long-term digital references
 
-Example:
-
-```text
-2dff55f9dad6a6fa8c88a67f57db8ae8
-```
+Example: `2dff55f9dad6a6fa8c88a67f57db8ae8`
 
 This object model is intended to provide durable identifiers for future operating system and research platform development.
 
@@ -164,12 +172,14 @@ BrisartOS/
 │   │   └── make_floppy_image.py
 │   ├── runtime/
 │   │   ├── brisart_platform.py
+│   │   ├── module_api.py
 │   │   ├── module_loader.py
 │   │   ├── runtime.py
 │   │   └── system_api.py
 │   ├── services/
 │   │   ├── archive_service.py
 │   │   ├── filesystem_service.py
+│   │   ├── service_registry.py
 │   │   ├── settings_service.py
 │   │   └── update_service.py
 │   ├── shell/
@@ -252,32 +262,32 @@ BrisartOS is being researched for environments such as:
 
 ### Short-Term Goals
 
-- Wire the service framework into the runtime
-- Expand runtime functionality
-- Expand service architecture
-- Improve module APIs
-- Improve shell capabilities
-- Build archive service infrastructure
+- Wire the service framework into the runtime - ✅ Done
+- Expand runtime functionality - 🟡 Partial / open-ended 
+- Expand service architecture - 🟡 Partial
+- Improve module APIs - ✅ Done
+- Improve shell capabilities - 🟡 Partial
+- Build archive service infrastructure - ❌ Not started
 
 ### Mid-Term Goals
 
-- Runtime initialization research
-- Filesystem experimentation
-- Settings management
-- Update infrastructure
-- Research application framework
-- Modular workflow development
+- Runtime initialization research - 🟡 Partial
+- Filesystem experimentation - ✅ Done
+- Settings management - ❌ Not started
+- Update infrastructure - ❌ Not started
+- Research application framework - ❌ Not started
+- Modular workflow development - 🟡 Partial
 
 ### Long-Term Goals
 
-- Hardware-installable operating system
-- Research-focused runtime environment
-- Preservation tooling integration
-- Identity management integration
-- Offline documentation infrastructure
-- Archive management capabilities
-- Air-gapped workstation profile
-- Long-term software stewardship platform
+- Hardware-installable operating system - ❌ Not started
+- Research-focused runtime environment - ❌ Not started
+- Preservation tooling integration - ❌ Not started
+- Identity management integration - ❌ Not started
+- Offline documentation infrastructure - ❌ Not started
+- Archive management capabilities - ❌ Not started
+- Air-gapped workstation profile - ❌ Not started
+- Long-term software stewardship platform - ❌ Not started
 
 ---
 

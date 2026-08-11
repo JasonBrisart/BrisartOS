@@ -1,3 +1,14 @@
+## [0.4.4-alpha] - 2026-08-10
+
+### Added
+- Added ServiceRegistry wiring through ModuleLoader into ModuleAPI.
+- Added ModuleAPI.get_service(name), gated by "service:<name>" permission.
+- Added ServiceRegistry.get_service_object() and has_service() accessors.
+### Changed
+- Modules can now request live service instances instead of only SystemAPI primitives.
+### Notes
+- Built-in services remain stubs; real service logic is the next step.
+
 ## [0.4.3-alpha] - 2026-08-10
 
 ### Added

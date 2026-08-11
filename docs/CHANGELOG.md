@@ -1,3 +1,35 @@
+## [0.4.5-alpha] - 2026-08-10
+
+### Added
+- Implemented real sandboxed file operations in FilesystemService
+  (list_files, read_text, write_text, read_bytes, write_bytes,
+  delete_file, exists, file_info), scoped per module under
+  module_data/<module_name>/.
+- Added path-containment enforcement in FilesystemService so no
+  filename or path traversal attempt (e.g. "../../etc/evil.txt")
+  can escape a module's own data directory.
+- Wired ServiceRegistry to accept and inject module_data_root into
+  FilesystemService at registration time.
+- Wired BrisartRuntime to pass SystemAPI.module_data_root into
+  ServiceRegistry, so SystemAPI and FilesystemService share one root.
+- Updated the Hello Lab module to demonstrate the "service:filesystem"
+  permission and ModuleAPI.get_service("filesystem") usage end-to-end.
+
+### Changed
+- FilesystemService version bumped from 0.1.0 to 0.2.0.
+- Hello Lab module version bumped from 0.1.0 to 0.2.0.
+
+### Notes
+- This is the first built-in service with real (non-stub) behavior;
+  Archive, Settings, and Update services remain stubs.
+- This update completes the loop opened in 0.4.3-alpha (permission-aware
+  ModuleAPI) and 0.4.4-alpha (ServiceRegistry wiring) by giving modules
+  an actual, permission-gated service to call.
+- Verified functionally: boot, service listing, module execution, file
+  read/write through both module_data and the filesystem service,
+  sandbox-escape rejection, and permission enforcement (PermissionError
+  and ServiceUnavailableError) all tested and passing.
+
 ## [0.4.4-alpha] - 2026-08-10
 
 ### Added

@@ -19,7 +19,9 @@ class BrisartRuntime:
     def __init__(self):
         self.platform = PlatformInfo()
         self.api = SystemAPI(self.platform)
-        self.services = ServiceRegistry()
+        self.services = ServiceRegistry(
+            module_data_root=self.api.module_data_root
+        )
         self.loader = ModuleLoader(
             modules_path="modules",
             api=self.api,

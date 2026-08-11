@@ -29,8 +29,9 @@ class ServiceRecord:
             "class": self.service.__class__.__name__,
         }
 class ServiceRegistry:
-    def __init__(self):
+    def __init__(self, module_data_root=None):
         self.services = {}
+        self.module_data_root = module_data_root
     def register(self, name, display_name, service):
         self.services[name] = ServiceRecord(
             name=name,
@@ -46,7 +47,7 @@ class ServiceRegistry:
         self.register(
             "filesystem",
             "Filesystem Service",
-            FilesystemService(),
+            FilesystemService(self.module_data_root),
         )
         self.register(
             "settings",

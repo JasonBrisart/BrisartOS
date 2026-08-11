@@ -260,34 +260,53 @@ BrisartOS is being researched for environments such as:
 
 ## Roadmap
 
+_Status current as of v0.4.5-alpha (2026-08-10). Update this line whenever
+status markers below are revised, so this table can never silently go stale.
+Completed items are moved to the section below as they land; see
+`docs/CHANGELOG.md` for full details on each release._
+
+### Completed
+
+- Wire the service framework into the runtime — v0.4.2-alpha
+- Improve module APIs (permission-aware ModuleAPI wrapper) — v0.4.3-alpha
+- Wire ServiceRegistry through to modules via `get_service()` — v0.4.4-alpha
+- Filesystem experimentation (sandboxed FilesystemService) — v0.4.5-alpha
+- Single-source-of-truth versioning — v0.4.1-alpha
+
 ### Short-Term Goals
 
-- Wire the service framework into the runtime - ✅ Done
-- Expand runtime functionality - 🟡 Partial / open-ended 
-- Expand service architecture - 🟡 Partial
-- Improve module APIs - ✅ Done
-- Improve shell capabilities - 🟡 Partial
-- Build archive service infrastructure - ❌ Not started
+- Expand service architecture — 🟡 Partial
+- Improve shell capabilities — 🟡 Partial
+- Expand runtime functionality — 🟡 Partial / open-ended
+- Build archive service infrastructure — ❌ Not started
+- Implement persistent logic for SettingsService (key/value config storage) — ❌ Not started
+- Add an automated test suite covering runtime boot, module loading, and permission enforcement — ❌ Not started
+- Add a script-friendly (JSON) output mode to shell inspection commands (`services`, `service <name>`, `describe <module>`) — ❌ Not started
 
 ### Mid-Term Goals
 
-- Runtime initialization research - 🟡 Partial
-- Filesystem experimentation - ✅ Done
-- Settings management - ❌ Not started
-- Update infrastructure - ❌ Not started
-- Research application framework - ❌ Not started
-- Modular workflow development - 🟡 Partial
+- Runtime initialization research — 🟡 Partial
+- Modular workflow development — 🟡 Partial
+- Settings management — ❌ Not started
+- Update infrastructure — ❌ Not started
+- Research application framework — ❌ Not started
+- Implement real logic for ArchiveService (versioned snapshots, object-ID linked records) — ❌ Not started
+- Implement real logic for UpdateService (auto-download, manual-install update flow) — ❌ Not started
+- Add CI pipeline (lint + automated tests) via GitHub Actions — ❌ Not started
+- Stress-test the module loader and permission model with multiple concurrent modules — ❌ Not started
 
 ### Long-Term Goals
 
-- Hardware-installable operating system - ❌ Not started
-- Research-focused runtime environment - ❌ Not started
-- Preservation tooling integration - ❌ Not started
-- Identity management integration - ❌ Not started
-- Offline documentation infrastructure - ❌ Not started
-- Archive management capabilities - ❌ Not started
-- Air-gapped workstation profile - ❌ Not started
-- Long-term software stewardship platform - ❌ Not started
+- Hardware-installable operating system — ❌ Not started
+- Research-focused runtime environment — ❌ Not started
+- Preservation tooling integration — ❌ Not started
+- Identity management integration — ❌ Not started
+- Offline documentation infrastructure — ❌ Not started
+- Archive management capabilities — ❌ Not started
+- Air-gapped workstation profile — ❌ Not started
+- Long-term software stewardship platform — ❌ Not started
+- Module signing / trust verification for shared or third-party modules — ❌ Not started
+- Integration hooks with BrisartIdentityTools and BrisartPreservationTools — ❌ Not started
 
 ---
 

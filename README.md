@@ -267,11 +267,11 @@ Completed items are moved to the section below as they land; see
 
 ### Completed
 
-- Wire the service framework into the runtime — v0.4.2-alpha
-- Improve module APIs (permission-aware ModuleAPI wrapper) — v0.4.3-alpha
-- Wire ServiceRegistry through to modules via `get_service()` — v0.4.4-alpha
-- Filesystem experimentation (sandboxed FilesystemService) — v0.4.5-alpha
-- Single-source-of-truth versioning — v0.4.1-alpha
+- Filesystem experimentation (sandboxed FilesystemService) — ✅ v0.4.5-alpha
+- Wire ServiceRegistry through to modules via `get_service()` — ✅ v0.4.4-alpha
+- Improve module APIs (permission-aware ModuleAPI wrapper) — ✅ v0.4.3-alpha
+- Wire the service framework into the runtime — ✅ v0.4.2-alpha
+- Single-source-of-truth versioning — ✅ v0.4.1-alpha
 
 ### Short-Term Goals
 

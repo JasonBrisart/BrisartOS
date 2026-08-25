@@ -276,7 +276,8 @@ Completed items are moved to the section below as they land; see
 ### Currently In Development
 
 - Hardware-installable operating system — ⚙️ In development
-
+- Add an automated test suite covering runtime boot, module loading, and permission enforcement — ⚙️ In development
+- 
 ### Short-Term Goals
 
 - Expand service architecture — 🟡 Partial
@@ -284,7 +285,6 @@ Completed items are moved to the section below as they land; see
 - Expand runtime functionality — 🟡 Partial / open-ended
 - Build archive service infrastructure — ❌ Not started
 - Implement persistent logic for SettingsService (key/value config storage) — ❌ Not started
-- Add an automated test suite covering runtime boot, module loading, and permission enforcement — ❌ Not started
 
 ### Mid-Term Goals
 

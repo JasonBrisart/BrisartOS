@@ -277,7 +277,7 @@ Completed items are moved to the section below as they land; see
 
 - Hardware-installable operating system — ⚙️ In development
 - Add an automated test suite covering runtime boot, module loading, and permission enforcement — ⚙️ In development
-- 
+
 ### Short-Term Goals
 
 - Expand service architecture — 🟡 Partial

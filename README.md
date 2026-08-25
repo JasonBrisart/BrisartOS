@@ -273,7 +273,7 @@ Completed items are moved to the section below as they land; see
 - Wire the service framework into the runtime — ✅ v0.4.2-alpha
 - Single-source-of-truth versioning — ✅ v0.4.1-alpha
 
-### Currently Working ON
+### Currently In Development
 
 - Hardware-installable operating system — ⚙️ In development
 

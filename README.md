@@ -273,6 +273,10 @@ Completed items are moved to the section below as they land; see
 - Wire the service framework into the runtime — ✅ v0.4.2-alpha
 - Single-source-of-truth versioning — ✅ v0.4.1-alpha
 
+### Currently Working ON
+
+- Hardware-installable operating system — ⚙️ In development
+
 ### Short-Term Goals
 
 - Expand service architecture — 🟡 Partial
@@ -296,7 +300,6 @@ Completed items are moved to the section below as they land; see
 
 ### Long-Term Goals
 
-- Hardware-installable operating system — ❌ Not started
 - Research-focused runtime environment — ❌ Not started
 - Preservation tooling integration — ❌ Not started
 - Identity management integration — ❌ Not started

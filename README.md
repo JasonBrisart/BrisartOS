@@ -260,17 +260,17 @@ BrisartOS is being researched for environments such as:
 
 ## Roadmap
 
-_Status current as of v0.4.5-alpha (2026-08-10). Update this line whenever
+_Status current as of v0.8.0-alpha (2026-08-10). Update this line whenever
 status markers below are revised, so this table can never silently go stale.
 Completed items are moved to the section below as they land; see
 `docs/CHANGELOG.md` for full details on each release._
 
 ### Completed
 
-- Filesystem experimentation (sandboxed FilesystemService) — ✅ v0.4.5-alpha
-- Wire ServiceRegistry through to modules via `get_service()` — ✅ v0.4.4-alpha
-- Improve module APIs (permission-aware ModuleAPI wrapper) — ✅ v0.4.3-alpha
-- Wire the service framework into the runtime — ✅ v0.4.2-alpha
+- Filesystem experimentation (sandboxed FilesystemService) — ✅ v0.8.0-alpha
+- Wire ServiceRegistry through to modules via `get_service()` — ✅ v0.7.0-alpha
+- Improve module APIs (permission-aware ModuleAPI wrapper) — ✅ v0.6.0-alpha
+- Wire the service framework into the runtime — ✅ v0.5.0-alpha
 - Single-source-of-truth versioning — ✅ v0.4.1-alpha
 
 ### Currently In Development

@@ -6,7 +6,6 @@ assembler, compiler, linker, GRUB, Linux build system, or external package.
 The boot image is intentionally tiny: it prints a BrisartOS message using BIOS
 video interrupt 0x10 and then halts forever.
 """
-
 from pathlib import Path
 
 BOOT_LOAD_ADDRESS = 0x7C00
@@ -43,13 +42,10 @@ def build_boot_sector() -> bytes:
     print_loop = len(code)
     code += b"\xAC"          # lodsb
     code += b"\x84\xC0"      # test al, al
-
     jz_index = len(code)
     code += b"\x74\x00"      # jz hang
-
     code += b"\xB4\x0E"      # mov ah, 0x0e
     code += b"\xCD\x10"      # int 0x10
-
     jmp_index = len(code)
     code += b"\xEB\x00"      # jmp print_loop
 

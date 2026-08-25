@@ -1,4 +1,60 @@
-## [0.4.5-alpha] - 2026-08-10
+All notable changes to BrisartOS are documented in this file.
+
+BrisartOS is a pure-Python, dependency-free, fully custom operating
+system research project.
+
+## [0.9.0-alpha] - 2026-08-25
+
+### Added
+- Added `brisartos/boot/boot_sector_test.py`: a pure-Python, dependency-free
+  8086 real-mode CPU interpreter that loads a 512-byte boot image at
+  physical address 0x7C00 (matching real BIOS boot behavior) and
+  executes it instruction-by-instruction, including BIOS `int 0x10`
+  teletype video output. Implements exactly the instruction subset the
+  current boot sector uses (XOR, MOV Sreg, MOV SI/AH, LODSB, TEST, JZ,
+  INT, JMP, HLT); any unsupported opcode raises a clear
+  `UnsupportedInstruction` error naming the opcode and address instead
+  of silently mis-executing.
+- This gives BrisartOS a behavioral, offline boot sector smoke test
+  with zero external tools (no QEMU, Bochs, or VM required), matching
+  the project's dependency-free philosophy all the way down to
+  hardware-boot verification.
+
+### Fixed
+- Removed a real bug in `brisartos/build.py`: its `build_image()`
+  function wrote non-executable ASCII placeholder bytes to
+  `build/brisartos_boot.img` -- the exact same path
+  `brisartos/boot/make_boot_image.py` writes the real, executable
+  512-byte boot sector to. Running `build.py` after
+  `make_boot_image.py` silently destroyed the working bootloader with
+  no warning. `build.py` is now a thin entry point that calls the one
+  canonical generator in `make_boot_image.py`, so there is exactly one
+  boot sector implementation in the project instead of two disagreeing
+  ones.
+
+### Verified
+- Disassembled `build/brisartos_boot.img` with objdump in 16-bit
+  real-mode (`-m i8086 --adjust-vma=0x7c00`): every instruction decodes
+  as intended and the patched `mov si` operand lands exactly on the
+  embedded message text.
+- Ran the new boot sector emulator against both the standalone 512-byte
+  `.img` and the sector embedded inside `build/brisartos_boot.vfd`
+  (byte-identical to the standalone image). Both reach `HLT` cleanly
+  and produce the correct BIOS teletype output with no infinite-loop or
+  unsupported-instruction failures.
+
+### Notes
+- This is the first BrisartOS boot artifact to be behaviorally
+  verified rather than only visually/statically inspected.
+- Real hardware or a real emulator (QEMU, Bochs, or a Hyper-V
+  Generation 1 VM with the .vfd attached as a virtual floppy) is still
+  the next verification step before this touches physical media; the
+  emulator here is a fast offline regression check, not a replacement
+  for that.
+
+---
+
+## [0.8.0-alpha] - 2026-08-10
 
 ### Added
 - Implemented real sandboxed file operations in FilesystemService
@@ -30,7 +86,9 @@
   sandbox-escape rejection, and permission enforcement (PermissionError
   and ServiceUnavailableError) all tested and passing.
 
-## [0.4.4-alpha] - 2026-08-10
+---
+
+## [0.7.0-alpha] - 2026-08-10
 
 ### Added
 - Added ServiceRegistry wiring through ModuleLoader into ModuleAPI.
@@ -41,7 +99,9 @@
 ### Notes
 - Built-in services remain stubs; real service logic is the next step.
 
-## [0.4.3-alpha] - 2026-08-10
+---
+
+## [0.6.0-alpha] - 2026-08-10
 
 ### Added
 - Added permission-aware module API wrapper.
@@ -58,7 +118,9 @@
 - This keeps BrisartOS dependency-free and standard-library-only.
 - This advances the module API and shell inspection roadmap.
 
-## [0.4.2-alpha] - 2026-08-10
+---
+
+## [0.5.0-alpha] - 2026-08-10
 
 ### Added
 - Added a BrisartOS service registry for built-in operating environment services.
@@ -75,6 +137,8 @@
 - This update keeps BrisartOS dependency-free and standard-library-only.
 - Existing service classes remain simple and unchanged.
 - This update advances the short-term roadmap goal of wiring the service framework into the runtime.
+
+---
 
 ## [0.4.1-alpha] - 2026-08-07
 

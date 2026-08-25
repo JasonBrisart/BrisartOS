@@ -260,7 +260,7 @@ BrisartOS is being researched for environments such as:
 
 ## Roadmap
 
-_Status current as of v0.8.0-alpha (2026-08-10). Update this line whenever
+_Status current as of v0.9.1-alpha (2026-08-25). Update this line whenever
 status markers below are revised, so this table can never silently go stale.
 Completed items are moved to the section below as they land; see
 `docs/CHANGELOG.md` for full details on each release._

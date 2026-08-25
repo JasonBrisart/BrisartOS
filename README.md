@@ -281,7 +281,6 @@ Completed items are moved to the section below as they land; see
 - Build archive service infrastructure — ❌ Not started
 - Implement persistent logic for SettingsService (key/value config storage) — ❌ Not started
 - Add an automated test suite covering runtime boot, module loading, and permission enforcement — ❌ Not started
-- Add a script-friendly (JSON) output mode to shell inspection commands (`services`, `service <name>`, `describe <module>`) — ❌ Not started
 
 ### Mid-Term Goals
 

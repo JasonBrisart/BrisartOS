@@ -3,6 +3,69 @@ All notable changes to BrisartOS are documented in this file.
 BrisartOS is a pure-Python, dependency-free, fully custom operating
 system research project.
 
+---
+
+## [0.9.1-alpha] - 2026-08-25
+
+### Fixed
+- Fixed two bare-metal safety bugs in `brisartos/boot/make_boot_image.py`
+  that were invisible in emulation but could fail on real firmware:
+  - **Uninitialized stack.** `int 0x10` requires the CPU to push
+    FLAGS/CS/IP onto SS:SP. The boot sector never set up a stack, so
+    on real hardware that push could land on garbage memory instead
+    of a safe location. Fixed by explicitly setting SS=0, SP=0x7C00
+    (stack grows down into unused low memory) before any interrupt is
+    invoked, with `cli`/`sti` bracketing the setup so a stray hardware
+    interrupt can't fire mid-transition.
+  - **Unnormalized CS.** The BIOS boot handoff is not guaranteed to be
+    CS:IP = 0000:7C00; some firmware uses 07C0:0000 instead (same
+    physical address, different segment). Every absolute offset in
+    this boot sector assumed the former. Fixed with a direct far jump
+    (`ljmp 0x0000:<offset>`) immediately after stack setup, which pins
+    CS to 0 regardless of which convention the firmware used.
+  - Also added an explicit `cld` before the `lodsb` print loop, since
+    the direction flag's state is not guaranteed at boot either.
+
+### Changed
+- Extended `tests/boot_sector_test.py` to support the new instructions
+  this fix introduces (`cli`, `sti`, `cld`, `mov ss/sp`, far
+  `jmp ptr16:16`) and to simulate a real stack: the interpreter now
+  tracks SS:SP and pushes onto it exactly as a real CPU would before
+  honoring an interrupt, raising a clear error if SS:SP was never
+  initialized or would underflow. This means the emulator can now
+  catch the exact class of bug this release fixes, instead of quietly
+  accepting a boot sector that happens to work in emulation but not on
+  real silicon.
+
+### Verified
+- Re-disassembled the rebuilt `build/brisartos_boot.img` with objdump
+  in 16-bit real mode: `cli`, full segment/stack setup, `sti`, `cld`,
+  and the far jump (`ljmp $0x0,$0x7c13`) all decode exactly as
+  intended, landing precisely on the patched targets.
+- Re-ran the (now stack-aware) boot sector emulator against both the
+  standalone `.img` and the sector embedded in `.vfd`. Both pass: the
+  stack is valid by the time `int 0x10` executes, and the correct
+  banner text prints before a clean `HLT`.
+
+### Notes
+- This is a correctness/safety fix to existing boot behavior, not new
+  boot sector functionality -- the sector still only prints a banner
+  and halts -- so this is a patch release per the versioning policy
+  above.
+- Real hardware or a standard emulator (QEMU, Bochs, or a Hyper-V
+  Generation 1 VM with the .vfd attached as a virtual floppy) is still
+  the next verification step; this fix specifically targets failure
+  modes that a custom Python interpreter can approximate but not fully
+  replace.
+- Corrected an incorrect file path referenced earlier in discussion of
+  this emulator: `boot_sector_test.py` lives at
+  `tests/boot_sector_test.py`, matching the actual repository folder
+  tree -- not `brisartos/boot/boot_sector_test.py`. No code moved and
+  no behavior changed; noted here rather than as a separate release
+  since it's a documentation correction, not a functional change.
+
+---
+
 ## [0.9.0-alpha] - 2026-08-25
 
 ### Added

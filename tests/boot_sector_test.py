@@ -18,17 +18,30 @@ dependency-free philosophy the rest of BrisartOS follows.
 
 Supported opcodes (intentionally small; grows only as real boot code
 grows):
+    FA           CLI
+    FB           STI
+    FC           CLD
     31 /r        XOR r/m16, r16      (register-direct only)
     8E /r        MOV Sreg, r/m16     (register-direct only)
     B8+r imm16   MOV r16, imm16      (not currently emitted, reserved)
+    BC imm16     MOV SP, imm16
     BE imm16     MOV SI, imm16
     AC           LODSB
     84 /r        TEST r/m8, r8       (register-direct only)
     74 rel8      JZ / JE
     B4 imm8      MOV AH, imm8
     CD imm8      INT imm8            (only int 0x10, ah=0x0E supported)
+    EA ptr16:16  JMP far (direct)
     EB rel8      JMP short
     F4           HLT
+
+This interpreter also tracks SS:SP and validates that the stack is
+inside addressable memory before honoring an INT instruction, since a
+real CPU pushes FLAGS/CS/IP onto SS:SP to service an interrupt. If SP
+was never initialized (or is 0, wrapping on the first push), that is
+flagged as a bare-metal safety bug rather than silently ignored --
+this is exactly the class of bug that can pass in a permissive
+emulator but corrupt memory on real firmware.
 """
 from pathlib import Path
 import sys
@@ -59,6 +72,8 @@ class BootSectorCPU:
         self.si = 0
         self.ds = 0
         self.es = 0
+        self.ss = None  # None until explicitly set; catches uninitialized-stack bugs
+        self.sp = None
         self.cs = 0
         self.ip = BOOT_LOAD_ADDRESS
         self.zero_flag = False
@@ -96,14 +111,51 @@ class BootSectorCPU:
     def _set_sreg(self, code: int, value: int) -> None:
         if code == 0b000:  # ES
             self.es = value
+        elif code == 0b010:  # SS
+            self.ss = value
         elif code == 0b011:  # DS
             self.ds = value
         else:
             raise UnsupportedInstruction(f"unsupported segment register code {code:#04b}")
 
+    # -- stack helpers (bare-metal safety) ------------------------------
+
+    def _push16(self, value: int) -> None:
+        """
+        Simulate what a real CPU does to service an interrupt: push a
+        16-bit value onto SS:SP and decrement SP by 2. Raises if SS:SP
+        was never initialized, or if the push would wrap SP below 0 --
+        both are real bare-metal bugs a permissive emulator could
+        otherwise hide.
+        """
+        if self.ss is None or self.sp is None:
+            raise UnsupportedInstruction(
+                "stack pointer (SS:SP) was never initialized before an "
+                "interrupt was invoked -- on real hardware this can corrupt "
+                "arbitrary memory instead of safely storing the return context"
+            )
+        if self.sp < 2:
+            raise UnsupportedInstruction(
+                f"stack pointer underflow: SP={self.sp:#06x} cannot hold a push "
+                "(stack was set up too small or too close to memory start)"
+            )
+        self.sp -= 2
+        addr = self._physical(self.ss, self.sp)
+        self.memory[addr] = value & 0xFF
+        self.memory[addr + 1] = (value >> 8) & 0xFF
+
     # -- interrupt handling --------------------------------------------
 
     def _interrupt(self, vector: int) -> None:
+        # A real CPU pushes FLAGS, CS, then IP before transferring
+        # control to the interrupt handler. Simulating that push here
+        # (even though our handler is a Python shortcut, not a real
+        # ISR) verifies the stack this boot sector set up is actually
+        # usable, exactly as real firmware would require.
+        self._push16(0)          # FLAGS (not modeled bit-for-bit; presence is what matters)
+        self._push16(self.cs)    # CS
+        self._push16(self.ip)    # IP (return address)
+
         if vector == 0x10:
             ah = (self.ax >> 8) & 0xFF
             al = self.ax & 0xFF
@@ -121,7 +173,16 @@ class BootSectorCPU:
         start_ip = self.ip
         opcode = self._fetch8()
 
-        if opcode == 0x31:  # XOR r/m16, r16
+        if opcode == 0xFA:  # CLI
+            pass  # interrupt masking has no observable effect in this model
+
+        elif opcode == 0xFB:  # STI
+            pass
+
+        elif opcode == 0xFC:  # CLD
+            pass  # forward-direction LODSB is already this interpreter's only behavior
+
+        elif opcode == 0x31:  # XOR r/m16, r16
             modrm = self._fetch8()
             if modrm == 0xC0:  # xor ax, ax
                 self.ax = 0
@@ -137,6 +198,9 @@ class BootSectorCPU:
             if mod != 0b11:
                 raise UnsupportedInstruction(f"unsupported MOV Sreg addressing mode at {start_ip:#06x}")
             self._set_sreg(reg, self._get_reg16(rm))
+
+        elif opcode == 0xBC:  # MOV SP, imm16
+            self.sp = self._fetch16()
 
         elif opcode == 0xBE:  # MOV SI, imm16
             self.si = self._fetch16()
@@ -167,6 +231,12 @@ class BootSectorCPU:
         elif opcode == 0xCD:  # INT imm8
             vector = self._fetch8()
             self._interrupt(vector)
+
+        elif opcode == 0xEA:  # JMP far ptr16:16 (direct)
+            offset = self._fetch16()
+            segment = self._fetch16()
+            self.cs = segment
+            self.ip = offset
 
         elif opcode == 0xEB:  # JMP rel8
             rel = self._signed8(self._fetch8())

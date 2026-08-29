@@ -4,7 +4,7 @@ Single source of truth for the BrisartOS version string.
 Pure Python. No dependencies.
 """
 NAME = "BrisartOS"
-VERSION = "0.9.1-alpha"
+VERSION = "0.10.0-alpha"
 
 
 def version_text():

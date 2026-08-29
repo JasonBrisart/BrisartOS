@@ -5,6 +5,102 @@ system research project.
 
 ---
 
+
+## [0.10.0-alpha] - 2026-08-29
+### Added
+- Added a full automated test suite under `tests/`, built entirely on
+  Python's standard library `unittest` module -- no pytest, no
+  third-party test framework, and no new dependency of any kind,
+  consistent with `docs/DEPENDENCY_POLICY.md`.
+- Added `tests/_support.py`: shared, dependency-free test scaffolding
+  (not itself a test module) that every `tests/test_*.py` file imports
+  for `sys.path` setup and a reusable `IsolatedCwd` context manager, so
+  no test run ever creates or pollutes `module_data/`/`logs/` inside the
+  real repository checkout.
+- Added `tests/run_tests.py` as the single entry point for the suite
+  (`python tests/run_tests.py`), wrapping `unittest`'s own discovery and
+  text runner. Exits `0` on success and `1` on any failure, so it can be
+  used as a CI or pre-commit gate.
+- Added 13 new `tests/test_*.py` modules covering, end to end:
+  - `brisartos/emitter.py` (`Emitter`) and `brisartos/labels.py`
+    (`Labels`) -- exact opcode/byte-level checks and relative-jump fixup
+    boundary conditions (-128..127).
+  - `brisartos/platform.py` and `brisartos/runtime/brisart_platform.py`
+    (both `PlatformInfo` classes) -- their independent `describe()`
+    contracts.
+  - `brisartos/boot/make_boot_image.py` (`rel8()`, `build_boot_sector()`)
+    -- including a full integration test that builds a real boot sector
+    and runs it through the existing `tests/boot_sector_test.py` 8086
+    emulator, asserting the captured BIOS `int 0x10` output matches the
+    banner text exactly.
+  - `brisartos/runtime/system_api.py` (`SystemAPI`) -- object ID
+    generation, `safe_name()` sanitization (including path-traversal
+    inputs), module-data read/write, and log append behavior.
+  - `brisartos/runtime/module_api.py` (`ModuleAPI`) -- every
+    permission-gated method individually, plus `get_service()` /
+    `available_services()` behavior with and without a service registry
+    attached.
+  - `brisartos/services/service_registry.py` (`ServiceRegistry`,
+    `ServiceRecord`) and `brisartos/services/filesystem_service.py`
+    (`FilesystemService`) -- registration/lookup contracts and
+    sandbox/path-containment enforcement.
+  - `brisartos/runtime/module_loader.py` (`ModuleLoader`,
+    `LoadedModule`) -- discovery, ABI-mismatch skipping, broken-module
+    skipping without crashing the whole discovery pass, and the
+    framework-level lifecycle logging that bypasses a module's own
+    declared permissions.
+  - `brisartos/runtime/runtime.py` (`BrisartRuntime`) -- full boot,
+    module lifecycle, and service lifecycle integration tests, run
+    against the real `modules/hello_lab/` module copied into an isolated
+    temporary directory.
+  - `brisartos/apps/browser.py` (`TextHTMLParser`, `normalize_url`,
+    `fetch_page`) -- HTML-to-text extraction and URL normalization, with
+    `urlopen` fully mocked so no real network call is ever made.
+  - `modules/hello_lab/module.py` -- a full permission-denial matrix
+    proving that removing any one of its four declared permissions
+    (`log`, `module_data`, `object_id`, `service:filesystem`) fails at
+    the exact call site that needed it, not somewhere unrelated.
+### Notes
+- No production code changed as part of this release. The suite is
+  purely additive under `tests/`.
+- While building this suite, two pre-existing fragility points were
+  identified and documented (in the relevant test files' docstrings)
+  rather than silently patched:
+  - `runtime.py` imports `version.py` with a flat `from version import
+    ...`, which only resolves correctly if the repository root happens
+    to already be on `sys.path` -- true in normal usage only because the
+    process's working directory is implicitly added. Tests add the repo
+    root explicitly rather than relying on this.
+  - `SystemAPI.__init__` unconditionally creates `module_data/` and
+    `logs/` relative to `Path.cwd()`, with no constructor override.
+    Every test that touches `SystemAPI` (directly or via
+    `BrisartRuntime`) runs inside `IsolatedCwd` to avoid writing into the
+    real repository checkout.
+- Also identified two environment-level naming collisions that are not
+  bugs in BrisartOS itself but had to be worked around in the test
+  suite: (1) `brisartos/platform.py` shares a name with the Python
+  standard library's own `platform` module, and (2) some Python
+  environments ship an unrelated, site-installed package literally named
+  `tests`, which can shadow this repository's `tests/` directory during
+  package-qualified imports. Both `brisartos/platform.py` and
+  `tests/boot_sector_test.py` are loaded by explicit file path under
+  private aliases in `tests/_support.py` to sidestep this rather than
+  relying on import order.
+### Verified
+- Ran the full suite via `python tests/run_tests.py`: 167 tests, 0
+  failures, 0 errors.
+- Re-ran the suite from a working directory other than the repository
+  root (`cd /tmp && python /path/to/BrisartOS/tests/run_tests.py`) to
+  confirm path resolution does not depend on the caller's own `cwd`.
+- Confirmed no stray `module_data/`, `logs/`, or other artifacts are
+  left behind anywhere in the repository after a full suite run.
+- Simulated a clean drop-in of every new `tests/` file into a copy of
+  the repository containing only the pre-existing
+  `tests/boot_sector_test.py`, and confirmed the same 167/167 pass
+  result with zero manual setup steps beyond copying the files.
+
+---
+
 ## [0.9.1-alpha] - 2026-08-25
 
 ### Fixed

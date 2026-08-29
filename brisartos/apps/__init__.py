@@ -1,3 +1,0 @@
-"""
-BrisartOS built-in applications.
-"""
